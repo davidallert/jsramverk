@@ -28,15 +28,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post("/", async (req, res) => {
-    const result = await documents.addOne(req.body);
-
-    return res.redirect(`/${result.lastID}`);
+    await documents.updateOne(req.body);
+    return res.redirect(`/${req.body.id}`);
 });
 
 app.get('/:id', async (req, res) => {
+    let rowid = req.params.id;
     return res.render(
         "doc",
-        { doc: await documents.getOne(req.params.id) }
+        { doc: await documents.getOne(req.params.id), rowid }
     );
 });
 
