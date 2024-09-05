@@ -27,21 +27,31 @@ if (process.env.NODE_ENV !== 'test') {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.post("/", async (req, res) => {
-    await documents.updateOne(req.body);
-    return res.redirect(`/${req.body.id}`);
+app.get('/', async (req, res) => {
+    return res.render("index", { docs: await documents.getAll() });
 });
 
-app.get('/:id', async (req, res) => {
+app.get('/create', async (req, res) => {
+    return res.render("doc_create.ejs", { docs: await documents.getAll() });
+});
+
+app.post("/create", async (req, res) => {
+    const result = await documents.addOne(req.body);
+
+    return res.redirect(`/`);
+});
+
+app.post("/update", async (req, res) => {
+    await documents.updateOne(req.body);
+    return res.redirect(`/update/${req.body.id}`);
+});
+
+app.get('/update/:id', async (req, res) => {
     let rowid = req.params.id;
     return res.render(
         "doc",
         { doc: await documents.getOne(req.params.id), rowid }
     );
-});
-
-app.get('/', async (req, res) => {
-    return res.render("index", { docs: await documents.getAll() });
 });
 
 app.listen(port, () => {
