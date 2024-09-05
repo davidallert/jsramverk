@@ -3,8 +3,8 @@
     <form method="POST" action="/" class="new-doc">
         <% if (doc) { %>
             <label for="title">Titel</label>
-            <input type="hidden" name="id" value="<%= rowid %>" />
             <input type="text" name="title" value="<%= doc.title %>" />
+            <input type="hidden" name="id" value="<%= rowid %>" />
             <label for="content">Innehåll</label>
             <textarea name="content"><%= doc.content %></textarea>
         <% } %>

@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS documents (
 );
 
 INSERT INTO documents (title, content)
-VALUES ("Test", "Lorem ipsum dolor sit amet.");
+VALUES ("Test", "Lorem ipsum.");
 
 UPDATE documents
 SET
