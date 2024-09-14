@@ -6,7 +6,6 @@
 const database = require("./db/database");
 const cors = require('cors');
 const index = require('./routes/index');
-const hello = require('./routes/hello');
 
 // MongoDB
 // const mongo = require("mongodb").MongoClient;
@@ -19,7 +18,6 @@ const app = express();
 
 app.use(cors());
 app.use('/', index);
-app.use('/hello', hello);
 
 // This is middleware called for all routes.
 // Middleware takes three parameters.
