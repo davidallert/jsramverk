@@ -13,10 +13,7 @@ const database = {
             app.use(morgan('combined')); // 'combined' outputs the Apache style LOGs
         }
 
-        const client  = await mongo.connect(dsn, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        const client  = await mongo.connect(dsn);
         const db = await client.db();
         const collection = await db.collection(collectionName);
 
