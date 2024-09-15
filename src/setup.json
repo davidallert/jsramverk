@@ -1,22 +1,10 @@
 [
     {
-        "namn": "Mumintrollet",
-        "bor": "Mumindalen"
+        "title": "Document 1",
+        "content": "Lorem ipsum."
     },
     {
-        "namn": "Sniff",
-        "bor": "Mumindalen"
-    },
-    {
-        "namn": "Snusmumriken",
-        "bor": "Mumindalen"
-    },
-    {
-        "namn": "Snorkfröken",
-        "bor": "Mumindalen"
-    },
-    {
-        "namn": "David",
-        "bor": "Inte i mumindalen"
+        "title": "Document 2",
+        "content": "Lorem ipsum dolor sit amet."
     }
 ]

@@ -6,18 +6,16 @@
 const database = require("./db/database");
 const cors = require('cors');
 const index = require('./routes/index');
-
-// MongoDB
-// const mongo = require("mongodb").MongoClient;
-const dsn =  process.env.DBWEBB_DSN || "mongodb://localhost:27017/mumin";
+const documents = require('./routes/documents');
 
 // Express server
-const port = process.env.DBWEBB_PORT || 1337;
+const port = process.env.DBWEBB_PORT || process.env.PORT || 1337;
 const express = require("express");
 const app = express();
 
 app.use(cors());
 app.use('/', index);
+app.use('/', documents);
 
 // This is middleware called for all routes.
 // Middleware takes three parameters.
@@ -32,21 +30,9 @@ app.use((req, res, next) => {
 //     res.send("Hello World");
 // });
 
-// Return a JSON object with list of all documents within the collection.
-app.get("/list", async (request, response) => {
-    const db = await database.getDb();
-    const resultSet = await db.collection.find({}).toArray();
-    console.log(resultSet);
-    response.json(resultSet);
-
-    await db.client.close();
-
-});
-
 // Startup server and liten on port
 app.listen(port, () => {
     console.log(`Server is listening on ${port}`);
-    console.log(`DSN is: ${dsn}`);
 });
 
 // Add routes for 404 and error handling

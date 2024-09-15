@@ -4,7 +4,7 @@
 "use strict";
 
 const mongo = require("mongodb").MongoClient;
-const dsn =  process.env.DBWEBB_DSN || "mongodb://localhost:27017/mumin";
+const dsn =  process.env.DBWEBB_DSN || process.env.DSN || "mongodb://localhost:27017/mumin";
 
 // Find documents for this living in...
 const criteria1 = {
@@ -32,17 +32,11 @@ const limit2 = 3;
 // Do it within an Immediately Invoked Async Arrow Function.
 // This is to enable usage of await within the function scope.
 (async () => {
-    // Find using .then()
-    findInCollection(dsn, "crowd", criteria1, projection1, limit1)
-        .then(res => console.log(res))
-        .catch(err => console.log(err));
-
     // Find using await
     try {
         let res = await findInCollection(
             dsn, "crowd", criteria2, projection2, limit2
         );
-
         console.log(res);
     } catch (err) {
         console.log(err);
