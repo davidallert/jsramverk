@@ -6,11 +6,19 @@ const ObjectId = require('mongodb').ObjectId;
 // Return a JSON object with list of all documents within the collection.
 router.get('/documents', async function(req, res, next) {
     const db = await database.getDb();
+<<<<<<< HEAD
     const result = await db.collection.find({}).toArray();
     console.log(result);
     const data = {
         data: {
             res: result
+=======
+    const resultSet = await db.collection.find({}).toArray();
+    console.log(resultSet);
+    const data = {
+        data: {
+            res: resultSet
+>>>>>>> 5b8de5863e29d3c1da85a570de9f2f096ae099b8
         }
     };
     res.json(data);

@@ -9,7 +9,11 @@ const morgan = require('morgan');
 const database = {
     getDb: async function getDb () {
         // let dsn = `mongodb://localhost:27017/docs`;
+<<<<<<< HEAD
         let dsn = `mongodb+srv://${process.env.ATLAS_USERNAME}:${process.env.ATLAS_PASSWORD}@cluster.fatuf.mongodb.net/docs?retryWrites=true&w=majority&appName=Cluster`
+=======
+        let dsn = `mongodb+srv://${process.env.ATLAS_USERNAME}:${process.env.ATLAS_PASSWORD}@cluster.fatuf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster`
+>>>>>>> 5b8de5863e29d3c1da85a570de9f2f096ae099b8
 
         if (process.env.NODE_ENV === 'test') {
             dsn = "mongodb://localhost:27017/test";
