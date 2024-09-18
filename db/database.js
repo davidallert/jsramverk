@@ -1,5 +1,7 @@
 // sudo service mongod start
-require('dotenv').config()
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+  }
 
 const mongo = require("mongodb").MongoClient;
 // const config = require("./config.json");
