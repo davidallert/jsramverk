@@ -22,7 +22,9 @@ router.get('/documents', async function(req, res, next) {
 // TODO get data from a React form.
 router.post('/documents', async function(req, res, next) {
     const db = await database.getDb();
-    const doc = { title: "Document 4", content: "Doc 4." } // FIX insert variables here.
+    // const doc = { title: "Document 4", content: "Doc 4." } // FIX insert variables here.
+    const doc = JSON.parse(req.body);
+    console.log(doc);
     const collection = db.collection;
     const result = await collection.insertOne(doc);
     console.log(result);
