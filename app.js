@@ -16,7 +16,8 @@ const app = express();
 const allowedOrigins = {
     origin: ['http://localhost:3000', 'https://www.student.bth.se/~daae23/editor/'],
     methods: ['GET', 'POST'],
-    allowedHeaders: ['Content-Type']
+    credentials: true,
+    allowedHeaders: ['Content-Type'],
 }
 
 app.use(cors(allowedOrigins));
