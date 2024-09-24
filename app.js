@@ -14,10 +14,14 @@ const express = require("express");
 const app = express();
 
 const allowedOrigins = {
-    origin: ['http://localhost:3000', 'https://www.student.bth.se/~daae23/editor/']
+    origin: ['http://localhost:3000', 'https://www.student.bth.se/~daae23/editor/'],
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type']
 }
 
 app.use(cors(allowedOrigins));
+app.options('*', cors(corsOptions));  // This will handle all `OPTIONS` requests
+
 app.use('/', index);
 app.use('/', documents);
 
