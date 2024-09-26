@@ -11,4 +11,6 @@ router.get('/', function(req, res, next) {
     res.json(data);
 });
 
+router.use(express.json());
+
 module.exports = router;
