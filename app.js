@@ -21,7 +21,6 @@ const app = express();
 // }
 
 app.use(cors());
-
 app.use('/', index);
 app.use('/', documents);
 

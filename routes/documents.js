@@ -21,14 +21,11 @@ router.get('/documents', async function(req, res, next) {
 // Create a new document.
 // TODO get data from a React form.
 router.post('/documents', async function(req, res, next) {
-    // const doc = { title: "Document 4", content: "Doc 4." } // FIX insert variables here.
     const db = await database.getDb();
-    const doc = JSON.parse(req.body);
     const collection = db.collection;
-
-    await collection.insertOne(doc);
-    // console.log(result);
-    // res.json(result)
+    const doc = req.body;
+    const result = await collection.insertOne(doc);
+    res.json(result);
     await db.client.close();
 });
 
