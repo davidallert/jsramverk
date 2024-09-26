@@ -29,6 +29,20 @@ router.post('/documents', async function(req, res, next) {
     await db.client.close();
 });
 
+router.post('/documents/update', async function(req, res, next) {
+    const db = await database.getDb();
+    const collection = db.collection;
+    const doc = req.body;
+    const documentId = req.body.id;
+    const result = await collection.updateOne(
+        { _id: new ObjectID(documentId) },
+        { $set: doc }
+    );
+    res.json(result);
+    await db.client.close();
+});
+
+
 // Get a document via its ID.
 // TODO get the ID from React.
 router.get('/document/:id', async function(req, res) {
