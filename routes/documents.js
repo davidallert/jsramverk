@@ -29,14 +29,18 @@ router.post('/documents', async function(req, res, next) {
     await db.client.close();
 });
 
-router.post('/documents/update', async function(req, res, next) {
+router.post('/document/update', async function(req, res, next) {
     const db = await database.getDb();
     const collection = db.collection;
     const doc = req.body;
-    const documentId = req.body.id;
+    console.log(doc);
     const result = await collection.updateOne(
-        { _id: new ObjectID(documentId) },
-        { $set: doc }
+        { _id: new ObjectId(doc.id) },
+        { $set: {
+            title: doc.title,
+            content: doc.content,
+          },
+        },
     );
     res.json(result);
     await db.client.close();
@@ -53,11 +57,5 @@ router.get('/document/:id', async function(req, res) {
     res.json(doc);
     await db.client.close();
 });
-
-// router.put('/document/:id', async (req, res) => {
-//     const db = await database.getDb();
-//     const collection = await database.collection;
-//     const result = await collection.updateOne()
-// })
 
 module.exports = router;
