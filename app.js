@@ -37,10 +37,10 @@ app.use((req, res, next) => {
 //     res.send("Hello World");
 // });
 
-// Startup server and liten on port
-app.listen(port, () => {
-    console.log(`Server is listening on ${port}`);
-});
+// Startup server and listen on port
+// app.listen(port, () => {
+//     console.log(`Server is listening on ${port}`);
+// });
 
 // Add routes for 404 and error handling
 // Catch 404 and forward to error handler
@@ -66,3 +66,10 @@ app.use((err, req, res, next) => {
         ]
     });
 });
+
+const server = app.listen(port, () => {
+    console.log(`Server is listening on ${port}`);
+});
+
+module.exports = server;
+// module.exports = app;
