@@ -16,7 +16,7 @@ chai.should();
 
 describe('Documents', () => {
     describe('GET /documents', () => {
-        it('200 HAPPY PATH', (done) => {
+        it('Should have status 200', (done) => {
             chai.request.execute(server)
                 .get("/documents")
                 .end((err, res) => {
@@ -27,6 +27,29 @@ describe('Documents', () => {
                         res.body.should.be.an("object");
                         res.body.data.res.should.be.an("array");
                         res.body.data.res.length.should.be.above(0);
+                        done(); // Finish the test
+                        server.close();
+                    }
+                });
+        });
+    });
+});
+
+describe('Documents', () => {
+    describe('GET /document/:id', () => {
+        it('Should have status 200', (done) => {
+            chai.request.execute(server)
+                .get("/document/66e6fce08939d00d5d5d578d")
+                .end((err, res) => {
+                    if (err) {
+                        done(err); // Pass the error to done() if there is one
+                    } else {
+                        res.should.have.status(200);
+                        res.body.should.be.an("array");
+                        res.body.length.should.be.above(0);
+                        res.body[0]._id.should.be.a("string");
+                        res.body[0].title.should.be.a("string");
+                        res.body[0].content.should.be.a("string");
                         done(); // Finish the test
                         server.close();
                     }
