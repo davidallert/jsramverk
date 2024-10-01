@@ -7,7 +7,7 @@ const ObjectId = require('mongodb').ObjectId;
 router.get('/documents', async function(req, res, next) {
     const db = await database.getDb();
     const result = await db.collection.find({}).toArray();
-    console.log(result);
+    // console.log(result);
     const data = {
         data: {
             res: result
@@ -19,7 +19,6 @@ router.get('/documents', async function(req, res, next) {
 });
 
 // Create a new document.
-// TODO get data from a React form.
 router.post('/documents', async function(req, res, next) {
     const db = await database.getDb();
     const collection = db.collection;
@@ -29,11 +28,12 @@ router.post('/documents', async function(req, res, next) {
     await db.client.close();
 });
 
+// Update an existing document.
 router.post('/document/update', async function(req, res, next) {
     const db = await database.getDb();
     const collection = db.collection;
     const doc = req.body;
-    console.log(doc);
+    // console.log(doc);
     const result = await collection.updateOne(
         { _id: new ObjectId(doc.id) },
         { $set: {
@@ -48,14 +48,23 @@ router.post('/document/update', async function(req, res, next) {
 
 
 // Get a document via its ID.
-// TODO get the ID from React.
 router.get('/document/:id', async function(req, res) {
     const db = await database.getDb();
     const collection = db.collection;
     const doc = await collection.find({"_id" : new ObjectId(req.params.id)}).toArray()
-    console.log(doc);
+    // console.log(doc);
     res.json(doc);
     await db.client.close();
 });
+
+// Delete a document with ID.
+// router.delete('/document', async function(req, res) {
+//     const db = await database.getDb();
+//     const collection = db.collection;
+//     await collection.deleteOne({ "_id" : 1 })
+//     // console.log(doc);
+//     // res.json(doc);
+//     await db.client.close();
+// });
 
 module.exports = router;
