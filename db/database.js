@@ -15,11 +15,11 @@ const database = {
 
         // console.log(dsn);
 
-        if (process.env.NODE_ENV === 'test') {
-            dsn = "mongodb://localhost:27017/test";
-            // use morgan to log at command line
-            app.use(morgan('combined')); // 'combined' outputs the Apache style LOGs
-        }
+        // if (process.env.NODE_ENV === 'test') {
+        //     dsn = "mongodb://localhost:27017/docs";
+        //     // use morgan to log at command line
+        //     app.use(morgan('combined')); // 'combined' outputs the Apache style LOGs
+        // }
 
         const client  = await mongo.connect(dsn, {
             useNewUrlParser: true,
