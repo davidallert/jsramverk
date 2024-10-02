@@ -60,7 +60,7 @@ describe('Documents', () => {
                         res.body.data.res.should.be.an("array");
                         res.body.data.res.length.should.be.above(0);
                         done(); // Finish the test
-                        server.close();
+                        // server.close();
                     }
                 });
         });
@@ -82,7 +82,7 @@ describe('Documents', () => {
                         res.body[0].content.should.be.a("string");
                         res.body[0]._id.should.equal("66e6fce08939d00d5d5d578d");
                         done(); // Finish the test
-                        server.close();
+                        // server.close();
                     }
                 });
         });
@@ -101,7 +101,7 @@ describe('Documents', () => {
                     } else {
                         res.should.have.status(200);
                         done(); // Finish the test
-                        server.close();
+                        // server.close();
                     }
                 });
         });
@@ -120,7 +120,7 @@ describe('Documents', () => {
                     } else {
                         res.should.have.status(200);
                         done(); // Finish the test
-                        server.close();
+                        // server.close();
                     }
                 });
         });
@@ -144,7 +144,7 @@ describe('Documents', () => {
                         res.body[0].title.should.equal("Document 1 (test)");
                         res.body[0].content.should.equal("This is the first document (test).");
                         done(); // Finish the test
-                        server.close();
+                        // server.close();
                     }
                 });
         });
@@ -163,7 +163,7 @@ describe('Documents', () => {
                     } else {
                         res.should.have.status(200);
                         done(); // Finish the test
-                        server.close();
+                        // server.close();
                     }
                 });
         });
