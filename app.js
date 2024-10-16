@@ -7,6 +7,7 @@ const database = require("./db/database");
 const cors = require('cors');
 const index = require('./routes/index');
 const documents = require('./routes/documents');
+const auth = require('./routes/auth')
 
 // Express server
 const port = process.env.DBWEBB_PORT || process.env.PORT || 1337;
@@ -23,6 +24,7 @@ const app = express();
 app.use(cors());
 app.use('/', index);
 app.use('/', documents);
+app.use('/', auth);
 
 // This is middleware called for all routes.
 // Middleware takes three parameters.
