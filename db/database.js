@@ -5,11 +5,11 @@ if (process.env.NODE_ENV !== 'production') {
 
 const mongo = require("mongodb").MongoClient;
 // const config = require("./config.json");
-const collectionName = "documents";
+// const collectionName = "documents";
 const morgan = require('morgan');
 
 const database = {
-    getDb: async function getDb () {
+    getDb: async function getDb (collectionName) {
         // let dsn = `mongodb://localhost:27017/docs`;
         let dsn = `mongodb+srv://${process.env.ATLAS_USERNAME}:${process.env.ATLAS_PASSWORD}@cluster.fatuf.mongodb.net/docs?retryWrites=true&w=majority&appName=Cluster`
 
