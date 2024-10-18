@@ -26,4 +26,26 @@ router.post('/register', async (req, res) => {
     });
 });
 
+router.post('/login', async (req, res) => {
+    const db = await database.getDb(collectionName);
+    const collection = db.collection;
+    const saltRounds = 10;
+    const email = req.body.email;
+    const password = JSON.stringify(req.body.password);
+    const user = await collection.find({"email" : email}).toArray();
+    const hash = user[0].password;
+
+    bcrypt.compare(password, hash, function(err, result) {
+        console.log(result);
+        if (result) {
+            res.json({ message: "Login successful" });
+        } else {
+            res.status(401).json({ message: "Invalid credentials" });
+        }
+    });
+
+    await db.client.close();
+
+});
+
 module.exports = router;
