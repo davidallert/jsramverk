@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const database = require("../db/database");
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const collectionName = "users";
 
 router.post('/register', async (req, res) => {
@@ -35,14 +36,21 @@ router.post('/login', async (req, res) => {
     const user = await collection.find({"email" : email}).toArray();
     const hash = user[0].password;
 
-    bcrypt.compare(password, hash, function(err, result) {
-        console.log(result);
-        if (result) {
-            res.json({ message: "Login successful" });
-        } else {
-            res.status(401).json({ message: "Invalid credentials" });
-        }
-    });
+    if (email && password) {
+        bcrypt.compare(password, hash, function(err, result) {
+            console.log(result);
+            if (result) {
+                const payload = { user: user };
+                const secret = process.env.JWT_SECRET;
+                const token = jwt.sign(payload, secret, { expiresIn: '24h'});
+
+                res.setHeader('x-access-token', token);
+                res.json({ message: "Login successful", token: token });
+            } else {
+                res.status(401).json({ message: "Invalid credentials" });
+            };
+        });
+    };
 
     await db.client.close();
 

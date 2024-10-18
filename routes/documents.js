@@ -3,9 +3,12 @@ const router = express.Router();
 const database = require("../db/database");
 const ObjectId = require('mongodb').ObjectId;
 const collectionName = "documents";
+const jwt = require('jsonwebtoken');
 
 // Return a JSON object with list of all documents within the collection.
-router.get('/documents', async function(req, res, next) {
+router.get('/documents', 
+    (req, res, next) => checkToken(req, res, next),
+    async function(req, res, next) {
     const db = await database.getDb(collectionName);
     const result = await db.collection.find({}).toArray();
     // console.log(result);
@@ -67,5 +70,22 @@ router.get('/document/:id', async function(req, res) {
 //     // res.json(doc);
 //     await db.client.close();
 // });
+
+function checkToken(req, res, next) {0
+    const token = req.headers['x-access-token'];
+    console.log('THIS IS BACKEND DOCUMENTS.JS. TOKEN:', token);
+    // if (token) {
+        jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) {
+            if (err) {
+                console.error(err)
+                res.send(err)
+                // send error response
+            } else {
+                // Valid token send on the request
+                next();
+            }
+        });
+    // }
+}
 
 module.exports = router;
