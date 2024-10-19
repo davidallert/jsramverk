@@ -6,11 +6,24 @@ const collectionName = "documents";
 const jwt = require('jsonwebtoken');
 
 // Return a JSON object with list of all documents within the collection.
-router.get('/documents', 
+router.get('/documents',
     (req, res, next) => checkToken(req, res, next),
     async function(req, res, next) {
     const db = await database.getDb(collectionName);
-    const result = await db.collection.find({}).toArray();
+
+    let decodedToken;
+
+    // FIX Should probably use the checkToken function for this, but I can't get it to work.
+    jwt.verify(req.headers['x-access-token'], process.env.JWT_SECRET, function(err, decoded) {
+        if (err) {
+            console.error(err)
+        } else {
+            decodedToken = decoded
+        }
+    });
+    const email = decodedToken.user[0].email;
+
+    const result = await db.collection.find({ owner: email }).toArray();
     // console.log(result);
     const data = {
         data: {
@@ -23,11 +36,29 @@ router.get('/documents',
 });
 
 // Create a new document.
-router.post('/documents', async function(req, res, next) {
+router.post('/documents',
+    (req, res, next) => checkToken(req, res, next),
+    async function(req, res, next) {
     const db = await database.getDb(collectionName);
     const collection = db.collection;
-    const doc = req.body;
+    let doc = req.body;
+    let decodedToken;
+
+    // FIX Should probably use the checkToken function for this, but I can't get it to work.
+    jwt.verify(req.headers['x-access-token'], process.env.JWT_SECRET, function(err, decoded) {
+        if (err) {
+            console.error(err)
+        } else {
+            decodedToken = decoded
+        }
+    });
+
+    const email = decodedToken.user[0].email;
+
+    doc.owner = email;
+
     const result = await collection.insertOne(doc);
+
     res.json(result);
     await db.client.close();
 });
@@ -71,21 +102,34 @@ router.get('/document/:id', async function(req, res) {
 //     await db.client.close();
 // });
 
-function checkToken(req, res, next) {0
+function checkToken(req, res, next) {
     const token = req.headers['x-access-token'];
-    console.log('THIS IS BACKEND DOCUMENTS.JS. TOKEN:', token);
+    console.log('-------------------------------------------------------------------------------');
+    console.log('This is documents.js (backend). JSON WEB TOKEN:', (token || "No token provided."));
+    console.log('-------------------------------------------------------------------------------');
     // if (token) {
         jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) {
             if (err) {
                 console.error(err)
                 res.send(err)
-                // send error response
+                // Send error response
             } else {
                 // Valid token send on the request
+                // res.send(decoded)
                 next();
             }
         });
     // }
 }
+
+// function decodeToken(req, res, next) {
+//     jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) {
+//         if (err) {
+//             console.error(err)
+//         } else {
+//             return decoded
+//         }
+//     });
+// }
 
 module.exports = router;
