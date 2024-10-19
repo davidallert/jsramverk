@@ -30,7 +30,6 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
     const db = await database.getDb(collectionName);
     const collection = db.collection;
-    const saltRounds = 10;
     const email = req.body.email;
     const password = JSON.stringify(req.body.password);
     const user = await collection.find({"email" : email}).toArray();
@@ -44,7 +43,7 @@ router.post('/login', async (req, res) => {
                 const secret = process.env.JWT_SECRET;
                 const token = jwt.sign(payload, secret, { expiresIn: '24h'});
 
-                res.setHeader('x-access-token', token);
+                // res.setHeader('x-access-token', token); // Not sure if necessary(?)
                 res.json({ message: "Login successful", token: token });
             } else {
                 res.status(401).json({ message: "Invalid credentials" });
