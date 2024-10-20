@@ -4,6 +4,10 @@ const database = require("../db/database");
 const ObjectId = require('mongodb').ObjectId;
 const collectionName = "documents";
 const jwt = require('jsonwebtoken');
+const Recipient = require('mailersend').Recipient
+const EmailParams = require('mailersend').EmailParams
+const MailerSend = require('mailersend').MailerSend
+const Sender = require('mailersend').Sender
 
 // Return a JSON object with list of all documents within the collection.
 router.get('/documents',
@@ -23,7 +27,12 @@ router.get('/documents',
     });
     const email = decodedToken.user[0].email;
 
-    const result = await db.collection.find({ owner: email }).toArray();
+    const result = await db.collection.find({
+        $or: [
+            { owner: email },
+            { invited: email }
+          ]
+     }).toArray();
     // console.log(result);
     const data = {
         data: {
@@ -56,11 +65,57 @@ router.post('/documents',
     const email = decodedToken.user[0].email;
 
     doc.owner = email;
+    doc.invited = [];
 
     const result = await collection.insertOne(doc);
 
     res.json(result);
     await db.client.close();
+});
+
+router.post('/invite',
+    (req, res, next) => checkToken(req, res, next),
+    async (req, res, next) => {
+        const sendFromEmail = "jsramverk@trial-k68zxl2yxn34j905.mlsender.net";
+        const sendToEmail = req.body.email;
+        const id = req.body.id;
+        const mailerSendConfig = {apiKey: process.env.MAILERSEND_API_KEY}
+        const mailerSend = new MailerSend(mailerSendConfig);
+        const recipients = [new Recipient(sendToEmail, sendToEmail)];
+        const sentFrom = new Sender(sendFromEmail, "MailerSend");
+
+        const emailParams = new EmailParams()
+        .setFrom(sentFrom)
+        .setTo(recipients)
+        .setSubject(`You've been invited to document ${id}`)
+        .setHtml(`
+            <a href="https://jsramverk-editor-daae23-cucfhygme0ete5ea.swedencentral-01.azurewebsites.net/invite?id=${id}&email=${sendToEmail}">Click here</a> to edit the document.
+            <br><br>
+            <a href="https://www.nationalgeographic.com/animals/mammals/facts/domestic-cat">Click here too.</a>`
+        );
+
+        try {
+            await mailerSend.email.send(emailParams)
+            res.send(emailParams);
+            console.log(emailParams);
+        } catch (error) {
+            console.log(error)
+        }
+});
+
+router.get('/invite', async (req, res, next) => {
+    const id = req.query.id
+    const email = req.query.email
+
+    const db = await database.getDb(collectionName);
+    const collection = db.collection;
+    const result = await collection.updateOne(
+        { _id: new ObjectId(id) },
+        { $addToSet: { invited: email } },
+    );
+    console.log(result);
+    await db.client.close();
+    res.redirect('https://www.student.bth.se/~daae23/editor/#/login');
 });
 
 // Update an existing document.
