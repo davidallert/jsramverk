@@ -7,7 +7,7 @@ const database = require("./db/database");
 const cors = require('cors');
 const index = require('./routes/index');
 const documents = require('./routes/documents');
-const auth = require('./routes/auth')
+const auth = require('./routes/auth');
 
 // Express server
 const port = process.env.DBWEBB_PORT || process.env.PORT || 1337;
@@ -25,6 +25,25 @@ app.use(cors());
 app.use('/', index);
 app.use('/', documents);
 app.use('/', auth);
+
+const httpServer = require("http").createServer(app);
+
+const io = require("socket.io")(httpServer, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"]
+  }
+});
+
+io.sockets.on('connection', function(socket) {
+    console.log(socket.id); // Nått lång och slumpat
+
+    socket.on("content", function (data) {
+        console.log(data);
+
+        io.emit("content", data)
+    });
+});
 
 // This is middleware called for all routes.
 // Middleware takes three parameters.
@@ -69,9 +88,14 @@ app.use((err, req, res, next) => {
     });
 });
 
-const server = app.listen(port, () => {
-    console.log(`Server is listening on ${port}`);
+// FIX combine app.listen and httpServer.listen when testing.
+// const server = app.listen(port, () => {
+//     console.log(`Server is listening on ${port}`);
+// });
+
+httpServer.listen(1337, () => {
+    console.log('Backend listening on *:1337');
 });
 
-module.exports = server;
+// module.exports = server;
 // module.exports = app;
