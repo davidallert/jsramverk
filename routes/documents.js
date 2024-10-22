@@ -4,10 +4,10 @@ const database = require("../db/database");
 const ObjectId = require('mongodb').ObjectId;
 const collectionName = "documents";
 const jwt = require('jsonwebtoken');
-const Recipient = require('mailersend').Recipient
-const EmailParams = require('mailersend').EmailParams
-const MailerSend = require('mailersend').MailerSend
-const Sender = require('mailersend').Sender
+const Recipient = require('mailersend').Recipient;
+const EmailParams = require('mailersend').EmailParams;
+const MailerSend = require('mailersend').MailerSend;
+const Sender = require('mailersend').Sender;
 
 // Return a JSON object with list of all documents within the collection.
 router.get('/documents',

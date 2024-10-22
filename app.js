@@ -30,19 +30,37 @@ const httpServer = require("http").createServer(app);
 
 const io = require("socket.io")(httpServer, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "*",
     methods: ["GET", "POST"]
   }
 });
 
 io.sockets.on('connection', function(socket) {
-    console.log(socket.id); // Nått lång och slumpat
+    console.log('Socket connected, id:', socket.id);
+
+    socket.on("joinRoom", function(documentId) {
+        socket.join(documentId);
+        console.log(`Socket ${socket.id} joined room: ${documentId}`);
+    });
 
     socket.on("content", function (data) {
-        console.log(data);
+        const { room, content } = data;
+        console.log(`Received content for room ${room}:`, content);
 
-        io.emit("content", data)
+        // Broadcast the content only to the clients in the specific room
+        io.to(room).emit("content", content);
     });
+
+    socket.on('disconnect', () => {
+        console.log(`Socket ${socket.id} disconnected`);
+    });
+
+    // previous
+    // socket.on("content", function (data) {
+    //     console.log(data);
+
+    //     io.emit("content", data)
+    // });
 });
 
 // This is middleware called for all routes.
@@ -93,8 +111,8 @@ app.use((err, req, res, next) => {
 //     console.log(`Server is listening on ${port}`);
 // });
 
-httpServer.listen(1337, () => {
-    console.log('Backend listening on *:1337');
+httpServer.listen(port, () => {
+    console.log(`Server is listening on ${port}.`);
 });
 
 // module.exports = server;
