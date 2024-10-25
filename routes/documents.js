@@ -66,6 +66,7 @@ router.post('/documents',
 
     doc.owner = email;
     doc.invited = [];
+    doc.comments = [];
 
     const result = await collection.insertOne(doc);
 
@@ -116,6 +117,29 @@ router.get('/invite', async (req, res, next) => {
     console.log(result);
     await db.client.close();
     res.redirect('https://www.student.bth.se/~daae23/editor/#/login');
+});
+
+router.post('/comment', async (req, res, next) => {
+    const id = req.body.id;
+    const text = req.body.text;
+    const comment = req.body.comment;
+
+    const db = await database.getDb(collectionName);
+    const collection = db.collection;
+    const result = await collection.updateOne(
+        { _id: new ObjectId(id) },
+        {
+            $push: {
+                comments: {
+                    text: text,
+                    comment: comment,
+                    createdAt: new Date(),
+                }
+            }
+        }
+    );
+    console.log(result);
+    await db.client.close();
 });
 
 // Update an existing document.
