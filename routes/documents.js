@@ -90,9 +90,7 @@ router.post('/invite',
         .setTo(recipients)
         .setSubject(`You've been invited to document ${id}`)
         .setHtml(`
-            <a href="https://jsramverk-editor-daae23-cucfhygme0ete5ea.swedencentral-01.azurewebsites.net/invite?id=${id}&email=${sendToEmail}">Click here</a> to edit the document.
-            <br><br>
-            <a href="https://www.nationalgeographic.com/animals/mammals/facts/domestic-cat">Click here too.</a>`
+            <a href="https://jsramverk-editor-daae23-cucfhygme0ete5ea.swedencentral-01.azurewebsites.net/invite?id=${id}&email=${sendToEmail}">Click here</a> to edit the document.`
         );
 
         try {

@@ -51,16 +51,17 @@ io.sockets.on('connection', function(socket) {
         io.to(room).emit("content", content);
     });
 
+    socket.on("comment", function (data) {
+        const { room, comment } = data;
+        console.log(`Received comment for room ${room}:`, comment);
+
+        // Broadcast the content only to the clients in the specific room
+        io.to(room).emit("comment", comment);
+    });
+
     socket.on('disconnect', () => {
         console.log(`Socket ${socket.id} disconnected`);
     });
-
-    // previous
-    // socket.on("content", function (data) {
-    //     console.log(data);
-
-    //     io.emit("content", data)
-    // });
 });
 
 // This is middleware called for all routes.
