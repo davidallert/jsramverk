@@ -30,3 +30,18 @@ För att dessa två projekten skulle kunna överföra information till varandra 
 Sedan skapade vi tester för backend som bl.a kontrollerar att datan som hämtas har rätt struktur och att våra routes returnerar status 200 när de anropas. Vi skapade också några tester för frontend som ser till att dokumenten skapas på rätt sätt, att input-variablernas värden uppdateras, etc.
 
 Därefter skapade vi en CI-kedja för backend med hjälp av GitHub Actions. Vårt s.k. workflow använder sig av en yml-konfigurationsfil för att köra testerna för alla permutationer av de specificerade versionerna.
+
+## Slutuppgift:
+
+**krav 1 autentisering:**
+
+För att lösa det första kravet, autentisering så behövde vi göra en ny route i våran databas för att kunna spara nya användare. Vi använde oss av bcrypt för att enkryptera vårat inlogg, och sedan använde vi det för att kunna jämföra lösenordet under login. Om användaren inte är inloggad så kan dem ej se dokumenten då dem är kopplade till ens användare. JWT token används för att hålla koll på detta. Dessa kopplade dokument kan då delas med andra genom en inbjudan via mejl, vi använder mailersend som platform för detta. Några problem som uppstod i detta krav var att mailersend ej skickade ut mejl efter ett tag. Vi är inte säkra om det är det är så att inbjudan har börjat ses som spam av gmail/hotmail eller om det är något annat som låser den.
+
+**krav 2 sockets:**
+
+I detta krav så var målet att kunna göra det möjligt för två användare att kunna redigera samma dokument samtidigt, och att det skulle uppdateras live, genom sockets. Vi lade till sockets och dess funktionalitet genom att först lägga till funktioner i backenden som bland annat skapar rum. efter det så förde vi vår information från backenden till vår frontend. För att skicka det vi skriver i dokumentet till backenden och sen tillbaka till alla i rummets frontend använde vi oss av emit kommandet för sockets. Genom detta så skapade vi en sida som uppdateras live efter användarens input och skickar tillbaka informationen till resterande av dem i room.
+*minns inte om vi hade så mycket problem med detta krav?*
+
+**krav 3 comments:**
+
+För att lösa detta krav så behövde vi på något sätt visa vad den texten man kommenterade hade för innehåll. Vi valde att göra det möjligt för användaren att markera ett stycke i dokumentet. Vi gjorde detta genom att titta på vart användarens markering i texten började och slutade, satt detta i en variabel, och sedan visade upp det i kommentars rutan i vårt dokument. Ett problem vi hade med detta var att vi först testade detta med ett input-fält med email som type, eftersom att vi ändå inte skulle använda den för email så var problemet lätt löst. Sedan behövde vi fixa vår styling till kommentarerna, dels så att det passade resten av dokument-sidan men även så att kommentarerna som skapades live hade en css till att börja med. Det löste vi dock ganska så fort med hjälp av bland annat classList.add.
