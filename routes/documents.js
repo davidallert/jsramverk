@@ -77,7 +77,7 @@ router.post('/documents',
 router.post('/invite',
     (req, res, next) => checkToken(req, res, next),
     async (req, res, next) => {
-        const sendFromEmail = "jsramverk@trial-k68zxl2yxn34j905.mlsender.net";
+        const sendFromEmail = "jsramverk@trial-3yxj6lj0neq4do2r.mlsender.net";
         const sendToEmail = req.body.email;
         const id = req.body.id;
         const mailerSendConfig = {apiKey: process.env.MAILERSEND_API_KEY}
@@ -90,7 +90,7 @@ router.post('/invite',
         .setTo(recipients)
         .setSubject(`You've been invited to document ${id}`)
         .setHtml(`
-            <a href="https://jsramverk-editor-daae23-cucfhygme0ete5ea.swedencentral-01.azurewebsites.net/invite?id=${id}&email=${sendToEmail}">Click here</a> to edit the document.`
+            <a href="https://jsramverk-editor-daae23-cucfhygme0ete5ea.swedencentral-01.azurewebsites.net/invite?id=${id}&email=${sendToEmail}">Click here</a> to accept.`
         );
 
         try {

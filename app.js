@@ -46,8 +46,6 @@ io.sockets.on('connection', function(socket) {
     socket.on("content", function (data) {
         const { room, content } = data;
         console.log(`Received content for room ${room}:`, content);
-
-        // Broadcast the content only to the clients in the specific room
         io.to(room).emit("content", content);
     });
 
